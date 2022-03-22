@@ -126,15 +126,15 @@ int main(){
     int maxExp;
     int maxHealth;
 
-    printf("請輸入生命值及升級所需經驗(m n):");
+    printf("Please enter the life max value and the experience value required to level up(m n):");
     scanf("%d %d", &maxHealth, &maxExp);
     
 
     int objNum;
-    printf("請輸入物件總數(I):");
+    printf("Please enter the total object number(I):");
     scanf("%d", &objNum);
 
-    printf("請輸入物件 %d 項物件:\n", objNum);
+    printf("Please enter each object number:\n", objNum);
     ObjectItem *objectArr[objNum];
     for (int i = 0; i < objNum; i++)
     {

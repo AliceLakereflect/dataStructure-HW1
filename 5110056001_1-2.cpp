@@ -132,35 +132,37 @@ int main(){
     passwordTable = Initialize();
 
     int x = 0,y = 0;
-    printf("請輸入加密方式(x y):");
+    printf("Please enter the enctrytion method(x y):");
     scanf("%d %d", &x, &y);
 
     Encrypt(passwordTable, x, y);
 
     int reverseNum = 0;
-    printf("請輸入以多少單位反轉(n)):");
+    printf("Please enter how many char you would like to reverse(n)):");
     scanf("%d", &reverseNum);
 
     int commandNum = 0;
-    printf("請輸入指令數(m)):");
+    printf("Please enter the command number(m)):");
     scanf("%d", &commandNum);
 
-    printf("請輸入指令:");
+    printf("Please start to enter the command:");
     queue<Msg> stringQueue;
     int commandCount = 0;
     char input[100];
     while(commandCount < commandNum){
         scanf("\n%[^\n]", input); 
         Msg message;
-        strcpy(message.msg, input);
+        for(int i = 0; input[i] != '\0'; i++){
+            message.msg[i] = input[i];
+        }
         stringQueue.push(message);
         commandCount++;
     }
     
-    printf("開始作業:\n");
-    printf("原文清單\n");
+    printf("Start the process:\n");
+    printf("Original list:\n");
     showq(stringQueue);
-    printf("對應密文輸出:\n");
+    printf("Encrypted text:\n");
 
     while(!stringQueue.empty())
     {
@@ -168,7 +170,7 @@ int main(){
         stringQueue.pop();
     }
 
-    printf("\n所有指令已結束\n");
+    printf("\nAll commands are completed.\n");
     printf("\n\n");
     return 0;
 }

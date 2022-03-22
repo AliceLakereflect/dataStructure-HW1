@@ -57,8 +57,16 @@ bool HasAnyInQueue(queue<int> portQs[], int portNum){
     return result;
 }
 
+bool stringCmp(string inputCommand, string command){
+    bool result = true;
+    for(int i = 0; inputCommand[i] != '\0'; i++){
+        if(inputCommand[i] != command[i]) result = false;
+    }
+    return result;
+}
+
 void EnqueueCommand(Port p){
-    printf("開始作業:\n");
+    printf("Start process:\n");
     queue<int> portQs[p.portNum];
 
     int currentCmdNum = 0;
@@ -68,30 +76,32 @@ void EnqueueCommand(Port p){
         int userId;
         int portId;
         scanf("%s", command);
-        if (strcmp(command, "enqueue") == 0){
+        if (stringCmp(command, "enqueue")){
             scanf("%d %d", &userId, &portId);
             portQs[portId-1].push(userId);
             currentCmdNum++;
-        }else if (strcmp(command, "dequeue") == 0){
+        }else if (stringCmp(command, "dequeue")){
             Execute(p, portQs);
             // printf("============> Dequeue output: %d \n", resultQ.front());
             // resultQ.pop();
             currentCmdNum++;
         }
-        bzero(command, 10);
+        for(int i = 0; i < 10; i++){
+            command[i] = '\0';
+        }
     }
     while(HasAnyInQueue(portQs, p.portNum))
     {
         Execute(p, portQs);
     };
-    printf("\n所有指令已結束\n");
+    printf("\nAll commands are completed.\n");
 }
 
 
 
 Port Initialize(){
     Port port;
-    printf("海關口數量:");
+    printf("The port number:");
     scanf("%d", &port.portNum);
 
     char *str;
@@ -99,7 +109,7 @@ Port Initialize(){
    /* Initial memory allocation */
    str = (char *) malloc(15);
 
-    printf("請輸入個海關口查驗時間,中間以空白區隔:");
+    printf("Please enter the processing time of each port, split by space:");
     int i = 0;
     while(i < port.portNum)
     {
@@ -116,17 +126,17 @@ Port Initialize(){
         timeCount[i] = port.processTime[i];
     }
 
-    printf("接下來有幾道指令?");
+    printf("How many command is there?");
     scanf("%d", &port.commandNum);
     
     // print inputs
-    printf("\n海關口數量為:%d\n", port.portNum);
-    printf("個別查驗時間為:");
+    printf("\nThe port number is:%d\n", port.portNum);
+    printf("The each processing time is:");
     for (int i = 0; i < port.portNum; i++)
     {
         printf("%d ", port.processTime[i]);
     }
-    printf("\n指令數為:%d\n", port.commandNum);
+    printf("\nThe command number:%d\n", port.commandNum);
 
     printf("\n");
     return port;

@@ -1,0 +1,103 @@
+20
+1 38 4 48 33 39 26 11 8 30 39 48 40 47 27 26 24 36 47 45
+100
+enqueue 4743 3
+enqueue 378 19
+enqueue 2628 10
+dequeue
+enqueue 2073 5
+enqueue 1673 8
+enqueue 2009 10
+dequeue
+enqueue 2281 6
+dequeue
+enqueue 4059 14
+enqueue 4142 6
+enqueue 540 17
+enqueue 212 15
+dequeue
+enqueue 684 6
+enqueue 65 18
+enqueue 4261 13
+enqueue 2949 9
+dequeue
+dequeue
+dequeue
+enqueue 659 13
+enqueue 894 3
+enqueue 3545 10
+enqueue 2688 7
+dequeue
+enqueue 4967 6
+enqueue 3497 14
+dequeue
+dequeue
+enqueue 834 17
+enqueue 457 13
+enqueue 2963 4
+enqueue 4983 14
+enqueue 1799 18
+enqueue 754 16
+enqueue 4108 9
+enqueue 612 8
+enqueue 2225 18
+dequeue
+enqueue 4031 4
+enqueue 1124 1
+enqueue 2465 4
+enqueue 962 17
+enqueue 2841 19
+dequeue
+dequeue
+dequeue
+enqueue 4020 10
+enqueue 155 12
+enqueue 4861 8
+enqueue 2530 10
+enqueue 3292 15
+dequeue
+dequeue
+enqueue 4786 11
+enqueue 1211 16
+enqueue 4988 4
+enqueue 4694 16
+enqueue 4380 15
+enqueue 647 16
+enqueue 3166 16
+dequeue
+enqueue 2275 13
+enqueue 583 11
+enqueue 4359 5
+enqueue 2621 9
+enqueue 4489 3
+enqueue 139 11
+dequeue
+enqueue 3275 15
+enqueue 4573 17
+enqueue 3161 1
+enqueue 3636 10
+dequeue
+dequeue
+enqueue 4961 10
+enqueue 843 12
+enqueue 1786 19
+enqueue 1212 2
+enqueue 4623 7
+dequeue
+enqueue 1456 10
+enqueue 844 18
+enqueue 2252 14
+enqueue 4135 14
+dequeue
+enqueue 3199 4
+enqueue 262 16
+enqueue 3618 6
+dequeue
+dequeue
+enqueue 482 6
+enqueue 4899 3
+enqueue 1696 2
+enqueue 3429 11
+enqueue 2544 12
+dequeue
+enqueue 2716 18

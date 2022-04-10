@@ -17,8 +17,7 @@ struct list_node {
 list_pointer head = (list_pointer) malloc(sizeof(list_node));
 list_pointer tail = (list_pointer) malloc(sizeof(list_node));
 
-list_pointer Create(int hatNum){
-     list_pointer first = (list_pointer) malloc(sizeof(list_node));
+void Create(list_pointer * first, int hatNum){
      int i = 1;
      list_pointer last;
      last = NULL;
@@ -30,20 +29,20 @@ list_pointer Create(int hatNum){
           newNode->next = NULL;
           newNode->prev = last;
           if(i == 1){
-               first = newNode;
-               last = first;
+               *first = newNode;
+               last = *first;
           }else{
                last->next = newNode;
           }
           // move forward the last
           last = newNode;
+          newNode = NULL;
+          free(newNode);
           i++;
      }while(i <= hatNum);
-     
-     return first;
 }
 
-list_pointer Insert(list_pointer list, int id, int insertNodeData, list_pointer nodeB, Direction d){
+void Insert(list_pointer * list, int id, int insertNodeData, list_pointer nodeB, Direction d){
      list_pointer newNode = (list_pointer) malloc(sizeof(list_node)); 
      newNode->data = insertNodeData;
      if(d == left){
@@ -55,9 +54,9 @@ list_pointer Insert(list_pointer list, int id, int insertNodeData, list_pointer 
                nodeB->prev = newNode;
           } else {
                nodeB->prev = newNode;
-               list = newNode;
+               *list = newNode;
                // update the head cause new node is the first
-               head = list;
+               head = *list;
           }
      }else{
           newNode->next = nodeB->next;
@@ -73,19 +72,20 @@ list_pointer Insert(list_pointer list, int id, int insertNodeData, list_pointer 
      }
 
      newNode = NULL;
-     return list; 
+     free(newNode);
 }
 
-list_pointer Delete(list_pointer list, int id, list_pointer deleteNode, list_pointer nodeBeforeDelete){
-     list_pointer temp = (list_pointer) malloc(sizeof(list_node));
+void Delete(list_pointer * list, int id, list_pointer deleteNode, list_pointer nodeBeforeDelete){
+     list_pointer * temp = (list_pointer *) malloc(sizeof(list_node));
      if (nodeBeforeDelete == NULL){
           // first
           temp = list;
-          list = list->next;
-          list->prev = NULL;
+          *list = (*list)->next;
+          (*list)->prev = NULL;
           temp = NULL;
+          free(temp);
           // update the head cause deleted node is the first
-          head = list;
+          head = *list;
      } else {
           nodeBeforeDelete->next = deleteNode->next;
           if(deleteNode->next != NULL)
@@ -96,14 +96,15 @@ list_pointer Delete(list_pointer list, int id, list_pointer deleteNode, list_poi
                tail = nodeBeforeDelete;
           }
      }
-     return list;
 }
 
-list_pointer Swap(list_pointer list, int idA, int idB){
+void Swap(list_pointer * list, int idA, int idB){
      list_pointer nodeA = (list_pointer) malloc(sizeof(list_node));
      list_pointer nodeB = (list_pointer) malloc(sizeof(list_node));
-     list_pointer temp = (list_pointer) malloc(sizeof(list_node));
+     list_pointer * temp = (list_pointer *) malloc(sizeof(list_node));
      temp = list;
+     list_pointer min = head;
+     list_pointer max = tail;
      int i = 1;
      bool stop = true;
      // search nodeA and nodeB
@@ -112,16 +113,27 @@ list_pointer Swap(list_pointer list, int idA, int idB){
           if(nodeA->data != '\0' && nodeB->data != '\0') stop = false;
           
           // find A from head
-          if(idA == list->data) nodeA = list;
+          if(idA == min->data) {
+               nodeA = min;
+          }
+          if(idA == max->data) {
+               nodeA = max;
+          }
 
           // find B from head
-          if(idB == list->data) nodeB = list;
+          if(idB == min->data) {
+               nodeB = min;
+          }
+          if(idB == max->data) {
+               nodeB = max;
+          }
           
           // node A or B is not exist in the list, stop the while loop
-          if(list->next == NULL) stop = false;
+          if(min->data == max->data) stop = false;
           else {
                // move to next node and continue to search
-               list = list->next;
+               min = min->next;
+               max = max->prev;
           }
           
           i++;
@@ -129,6 +141,9 @@ list_pointer Swap(list_pointer list, int idA, int idB){
 
      list = temp;
      temp = NULL;
+     free(temp);
+     min = NULL;
+     max = NULL;
 
      // swap the 2 data of nodes
      int tmp = nodeA->data;
@@ -137,11 +152,11 @@ list_pointer Swap(list_pointer list, int idA, int idB){
 
      nodeA = NULL;
      nodeB = NULL;
-
-     return list;
+     free(nodeA);
+     free(nodeB);
 }
 
-list_pointer Inverse(list_pointer list, int size){
+void Inverse(list_pointer * list, int size){
      // only need to loop till the middle of the list. 
      // set data type to int so the value will round to the smaller integer automatically
      int s = size / 2;
@@ -157,15 +172,15 @@ list_pointer Inverse(list_pointer list, int size){
           min = min->next;
           max = max->prev;
      }
-
-     return list;
 }
 
-list_pointer InsertById(list_pointer list, int idA, int idB, Direction d){
+void InsertById(list_pointer * list, int idA, int idB, Direction d){
      list_pointer nodeA = (list_pointer) malloc(sizeof(list_node));
      list_pointer nodeB = (list_pointer) malloc(sizeof(list_node));
-     list_pointer temp = (list_pointer) malloc(sizeof(list_node));
+     list_pointer * temp = (list_pointer *) malloc(sizeof(list_node));
      temp = list;
+     list_pointer min = head;
+     list_pointer max = tail;
      int i = 1;
      bool stop = true;
      // search nodeA and nodeB
@@ -174,19 +189,27 @@ list_pointer InsertById(list_pointer list, int idA, int idB, Direction d){
           if(nodeA->data != '\0' && nodeB->data != '\0') stop = false;
           
           // find A from head
-          if(idA == list->data) {
-               nodeA = list;
+          if(idA == min->data) {
+               nodeA = min;
+          }
+          if(idA == max->data) {
+               nodeA = max;
           }
 
-          // find A from head
-          if(idB == list->data) 
-               nodeB = list;
+          // find B from head
+          if(idB == min->data) {
+               nodeB = min;
+          }
+          if(idB == max->data) {
+               nodeB = max;
+          }
           
           // node A or B is not exist in the list, stop the while loop
-          if(list->next == NULL) stop = false;
+          if(min->data == max->data) stop = false;
           else {
                // move to next node and continue to search
-               list = list->next;
+               min = min->next;
+               max = max->prev;
           }
           
           i++;
@@ -194,46 +217,46 @@ list_pointer InsertById(list_pointer list, int idA, int idB, Direction d){
 
      list = temp;
      temp = NULL;
+     free(temp);
+     min = NULL;
+     max = NULL;
 
      if((d == left && nodeA->next == nodeB) || (d == right && nodeA->prev == nodeB)){
-          return list;
+          return;
      }
 
-     list = Insert(list, idB, nodeA->data, nodeB, d);
-     list = Delete(list, idA, nodeA, nodeA->prev);
+     Insert(list, idB, nodeA->data, nodeB, d);
+     Delete(list, idA, nodeA, nodeA->prev);
 
      nodeA = NULL;
      nodeB = NULL;
-     
-     return list; 
+     free(nodeA);
+     free(nodeB);
 }
 
-list_pointer Execute(list_pointer list, int command, int idA, int idB, int hatNum){
-     list_node nodeA, nodeB;
+void Execute(list_pointer * list, int command, int idA, int idB, int hatNum){
      switch (command)
      {
           case 1:
                // Insert hat A on the left of hatB
-               list = InsertById(list, idA, idB, left);
+               InsertById(list, idA, idB, left);
                break;
           case 2:
                // Insert hatA on the right of hatB
-               list = InsertById(list, idA, idB, right);
+               InsertById(list, idA, idB, right);
                break;
           case 3:
                // swap hatA and hatB
-               list = Swap(list, idA, idB);
+               Swap(list, idA, idB);
                break;
           case 4:
                // inverse linked list
-               list = Inverse(list, hatNum);
+               Inverse(list, hatNum);
                break;
           
           default:
                break;
      }
-
-     return list;
 }
 
 // function to write a file
@@ -284,7 +307,8 @@ int main(int argc, char * argv[])
      int hatNum, commandNum;
      fscanf(database, "%d %d", &hatNum, &commandNum);
      printf("> %d %d\n", hatNum, commandNum);
-     list_pointer list = Create(hatNum);
+     list_pointer list = (list_pointer) malloc(sizeof(list_node));
+     Create(&list, hatNum);
      // save the head and tail
      head = list;
      tail = list;
@@ -292,22 +316,36 @@ int main(int argc, char * argv[])
           tail = tail->next;
      }
 
+     int commandList[commandNum];
+     int aList[commandNum];
+     int bList[commandNum];
      for (int i = 0; i < commandNum; i++)
      {
-          int command;
-          int idA;
-          int idB;
-          fscanf(database, " %d", &command);
-          if(command != 4)
-               fscanf(database, "\n%d %d", &idA, &idB);
-          // printf("> %d %d %d\n", command, idA, idB);
-          list = Execute(list, command, idA, idB, hatNum);
+          // parse and save the commands from the file
+          fscanf(database, " %d", &commandList[i]);
+          if(commandList[i] != 4)
+               fscanf(database, "\n%d %d", &aList[i], &bList[i]);
+          else{
+               aList[i] = 0;
+               bList[i] = 0;
+          }
+     }
+     fclose(database);
+
+     // Execute commands
+     for (int i = 0; i < commandNum; i++)
+     {
+          Execute(&list, commandList[i], aList[i], bList[i], hatNum);
           if(i % 1000 == 0) 
                printf("i = %d\n", i);
      }
 
-     fclose(database);
+
      char fileName[30] = "output.txt";
      WriteSum(fileName, list);
+
+     free(head);
+     free(tail);
+
      return (0);
 }

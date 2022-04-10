@@ -22,6 +22,7 @@ list_pointer Create(char* str){
           }else{
                last->link = newNode;
           }
+          // move forward
           last = newNode;
           i++;
      }while(str[i] != '\0');
@@ -33,6 +34,7 @@ list_pointer Insert(list_pointer list, int exeNum, char insertChar){
      int i = 1;
      bool stop = true;
      list_pointer preNode = list;
+     // find the previous node of the insert position
      while(stop){
           if(i < exeNum - 1 && preNode->link != NULL)
                preNode = preNode->link;
@@ -41,14 +43,16 @@ list_pointer Insert(list_pointer list, int exeNum, char insertChar){
           
           i++;
      }
-
+     // build for the new node
      list_pointer temp; 
      temp = (list_pointer) malloc(sizeof(list_node)); 
      temp->data = insertChar;
      if(exeNum == 1){
+          // first
           temp->link = list;
           list = temp;
      } else {
+          // not the first
           temp->link = preNode->link;
           preNode->link = temp;
      }
@@ -60,6 +64,7 @@ list_pointer Delete(list_pointer list, int exeNum){
      bool stop = true;
      list_pointer trailNode = list;
      list_pointer deletedNode = trailNode->link;
+     // find the nodes
      while(stop){
           if(i < exeNum - 1 && trailNode->link != NULL){
                trailNode = trailNode->link;
@@ -72,12 +77,11 @@ list_pointer Delete(list_pointer list, int exeNum){
      }
 
      if(exeNum == 1){
+          // first
           list = list->link;
      }else if(trailNode->link != NULL){
+          // delete for a node not in the last
           trailNode->link = deletedNode->link;
-     }else{
-          // delete last
-
      }
      return list;
 }
@@ -161,6 +165,7 @@ int main(int argc, char * argv[])
           int exeNum;
           char insertChar;
           fscanf(database, "\n%c %d", &command, &exeNum);
+          // if command is A, need to scan more charactor for insert char
           if(command == 'A')
                fscanf(database, " %c", &insertChar);
           printf("> %c %d %c\n", command, exeNum, insertChar);

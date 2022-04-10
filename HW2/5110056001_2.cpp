@@ -14,6 +14,9 @@ struct list_node {
      list_pointer next; 
 };
 
+list_pointer head = (list_pointer) malloc(sizeof(list_node));
+list_pointer tail = (list_pointer) malloc(sizeof(list_node));
+
 list_pointer Create(int hatNum){
      list_pointer first = (list_pointer) malloc(sizeof(list_node));
      int i = 1;
@@ -21,7 +24,9 @@ list_pointer Create(int hatNum){
      last = NULL;
      do {
           list_pointer newNode = (list_pointer) malloc(sizeof(list_node));
+          // assign data by i
           newNode->data = i;
+          // set the default next and prev for new node
           newNode->next = NULL;
           newNode->prev = last;
           if(i == 1){
@@ -30,6 +35,7 @@ list_pointer Create(int hatNum){
           }else{
                last->next = newNode;
           }
+          // move forward the last
           last = newNode;
           i++;
      }while(i <= hatNum);
@@ -44,17 +50,25 @@ list_pointer Insert(list_pointer list, int id, int insertNodeData, list_pointer 
           newNode->prev = nodeB->prev;
           newNode->next = nodeB;
           if(nodeB->prev != NULL){
+               // update when the new node is not the first
                nodeB->prev->next = newNode;
                nodeB->prev = newNode;
           } else {
                nodeB->prev = newNode;
                list = newNode;
+               // update the head cause new node is the first
+               head = list;
           }
      }else{
           newNode->next = nodeB->next;
           newNode->prev = nodeB;
           if(nodeB->next != NULL)
+               // update when the new node is not the last
                nodeB->next->prev = newNode;
+          else{
+               // update the tail cause new node is the last
+               tail = newNode;
+          }
           nodeB->next = newNode;
      }
 
@@ -70,10 +84,17 @@ list_pointer Delete(list_pointer list, int id, list_pointer deleteNode, list_poi
           list = list->next;
           list->prev = NULL;
           temp = NULL;
+          // update the head cause deleted node is the first
+          head = list;
      } else {
           nodeBeforeDelete->next = deleteNode->next;
           if(deleteNode->next != NULL)
+               // update when the deleted node is not the last
                nodeBeforeDelete->next->prev = nodeBeforeDelete;
+          else{
+               // update the tail cause deleted node is the last
+               tail = nodeBeforeDelete;
+          }
      }
      return list;
 }
@@ -85,16 +106,21 @@ list_pointer Swap(list_pointer list, int idA, int idB){
      temp = list;
      int i = 1;
      bool stop = true;
-     
+     // search nodeA and nodeB
      while (stop){
+          // stop when both nodeA and nodeB found
           if(nodeA->data != '\0' && nodeB->data != '\0') stop = false;
           
+          // find A from head
           if(idA == list->data) nodeA = list;
 
+          // find B from head
           if(idB == list->data) nodeB = list;
           
+          // node A or B is not exist in the list, stop the while loop
           if(list->next == NULL) stop = false;
           else {
+               // move to next node and continue to search
                list = list->next;
           }
           
@@ -104,16 +130,11 @@ list_pointer Swap(list_pointer list, int idA, int idB){
      list = temp;
      temp = NULL;
 
+     // swap the 2 data of nodes
      int tmp = nodeA->data;
      nodeA->data = nodeB->data;
      nodeB->data = tmp;
 
-     // nodeA->data = '\0';
-     // nodeA->prev = NULL;
-     // nodeA->next = NULL;
-     // nodeB->data = '\0';
-     // nodeB->prev = NULL;
-     // nodeB->next = NULL;
      nodeA = NULL;
      nodeB = NULL;
 
@@ -121,20 +142,18 @@ list_pointer Swap(list_pointer list, int idA, int idB){
 }
 
 list_pointer Inverse(list_pointer list, int size){
+     // only need to loop till the middle of the list. 
+     // set data type to int so the value will round to the smaller integer automatically
      int s = size / 2;
-     list_pointer min = (list_pointer) malloc(sizeof(list_node));
-     list_pointer max = (list_pointer) malloc(sizeof(list_node));
-     min = list;
-     max = list;
-     while (max->next){
-          max = max->next;
-     }
-
+     list_pointer min = head;
+     list_pointer max = tail;
      for(int i = 0; i < s; i++){
+          // swap all the data of min and max
           int tmp = min->data;
           min->data = max->data;
           max->data = tmp;
 
+          // move next
           min = min->next;
           max = max->prev;
      }
@@ -149,18 +168,26 @@ list_pointer InsertById(list_pointer list, int idA, int idB, Direction d){
      temp = list;
      int i = 1;
      bool stop = true;
+     // search nodeA and nodeB
      while (stop){
+          // stop when both nodeA and nodeB found
           if(nodeA->data != '\0' && nodeB->data != '\0') stop = false;
           
+          // find A from head
           if(idA == list->data) {
                nodeA = list;
           }
 
+          // find A from head
           if(idB == list->data) 
                nodeB = list;
           
+          // node A or B is not exist in the list, stop the while loop
           if(list->next == NULL) stop = false;
-          else list = list->next;
+          else {
+               // move to next node and continue to search
+               list = list->next;
+          }
           
           i++;
      }
@@ -186,15 +213,19 @@ list_pointer Execute(list_pointer list, int command, int idA, int idB, int hatNu
      switch (command)
      {
           case 1:
+               // Insert hat A on the left of hatB
                list = InsertById(list, idA, idB, left);
                break;
           case 2:
+               // Insert hatA on the right of hatB
                list = InsertById(list, idA, idB, right);
                break;
           case 3:
+               // swap hatA and hatB
                list = Swap(list, idA, idB);
                break;
           case 4:
+               // inverse linked list
                list = Inverse(list, hatNum);
                break;
           
@@ -205,8 +236,8 @@ list_pointer Execute(list_pointer list, int command, int idA, int idB, int hatNu
      return list;
 }
 
-// function to write linked list to a file
-void WriteLinkedList(char filename[], list_pointer head){
+// function to write a file
+void WriteSum(char filename[], list_pointer head){
      list_pointer temp = head;
     
      FILE *file = fopen (filename, "w+");
@@ -254,6 +285,12 @@ int main(int argc, char * argv[])
      fscanf(database, "%d %d", &hatNum, &commandNum);
      printf("> %d %d\n", hatNum, commandNum);
      list_pointer list = Create(hatNum);
+     // save the head and tail
+     head = list;
+     tail = list;
+     while (tail->next){
+          tail = tail->next;
+     }
 
      for (int i = 0; i < commandNum; i++)
      {
@@ -271,6 +308,6 @@ int main(int argc, char * argv[])
 
      fclose(database);
      char fileName[30] = "output.txt";
-     WriteLinkedList(fileName, list);
+     WriteSum(fileName, list);
      return (0);
 }
